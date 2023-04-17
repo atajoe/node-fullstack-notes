@@ -18,8 +18,7 @@ app.use(express.static('build'));
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+
 
 // Listen to port
 app.listen(PORT, console.log(`Express app listening on ${PORT}`))
