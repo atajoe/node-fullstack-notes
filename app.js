@@ -5,13 +5,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-app.use(express.static('build'));
+
 
 
 // Setting up Express App
 const app = express();
 const PORT = process.env.PORT || 3001;
-
+app.use(express.static('build'));
 
 
 // Routes
