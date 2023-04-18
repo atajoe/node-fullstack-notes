@@ -4,6 +4,7 @@ mongoose.set('strictQuery', false)
 
 // Connect to mongodb database
 const DBURI = process.env.MONGODB_URI
+console.log("Database_URL", DBURI);
 console.log('Connecting to ', DBURI)
 mongoose.connect(DBURI, { useNewUrlParser: true, useUnifiedTopology: true })
         .then((res) => {
