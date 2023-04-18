@@ -33,7 +33,7 @@ app.use(cookieParser());
 
 
 // Express routers
-app.use('/api/note', indexRouter);
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
