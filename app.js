@@ -11,14 +11,15 @@ const cors = require('cors');
 // Setting up Express App
 const app = express();
 const PORT = process.env.PORT || 3001;
-app.use(express.static('build'));
+
 
 
 // Routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
 
 // Listen to port
 app.listen(PORT, console.log(`Express app listening on ${PORT}`))
@@ -30,10 +31,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+app.use(express.static('build'));
 
 // Express routers
-app.use('/', indexRouter);
+app.use('/api/note', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
