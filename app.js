@@ -5,24 +5,34 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-
-
-
+const customMiddleWare = require('./utils/middleware');
 // Setting up Express App
 const app = express();
-const PORT = process.env.PORT || 3001;
-
-
 
 // Routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
-// Listen to port
-app.listen(PORT, console.log(`Express app listening on ${PORT}`))
+// Connection to MongoDB
+
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false)
+
+// Connect to mongodb database
+const DBURI = process.env.NODE_ENV === 'development' 
+? process.env.TEST_MONGODB_URI 
+: process.env.MONGODB_URI
+console.log("Database_URL", DBURI);
+console.log('Connecting to ', DBURI)
+mongoose.connect(DBURI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then((res) => {
+          console.log('Successfully connected!')
+        })
+        .catch((err) => console.log(err))
 
 
 // Middleware
@@ -35,22 +45,11 @@ app.use(express.static('build'));
 
 // Express routers
 app.use('/api/note', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use(customMiddleWare.unknownEndpoint);
+app.use(customMiddleWare.errorHandler);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
 
 module.exports = app;

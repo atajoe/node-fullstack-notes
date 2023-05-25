@@ -1,29 +1,22 @@
-require('dotenv').config()
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false)
-
-// Connect to mongodb database
-const DBURI = process.env.MONGODB_URI
-console.log("Database_URL", DBURI);
-console.log('Connecting to ', DBURI)
-mongoose.connect(DBURI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then((res) => {
-          console.log('Successfully connected!')
-        })
-        .catch((err) => console.log(err))
-
-
 // Creating our schema
 const Schema = mongoose.Schema;
 
 const noteSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        minLength: 5
     },
     description:{
         type: String,
-        required: true
+        required: true,
+        minLength: 10
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, { timestamps: true, versionKey: false, id: false })
 
